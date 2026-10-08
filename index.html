@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MediMind – Medicine Reminder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ============ LOGIN / SIGN UP ============ -->
+<section id="auth" class="auth">
+  <div class="hero">
+    <div class="logo">💊 MediMind</div>
+    <div class="capsules" aria-hidden="true"><i class="cap c1"></i><i class="cap c2"></i><i class="cap c3"></i></div>
+    <h1>Every dose, right on time.</h1>
+    <p>Set your medicines once. MediMind reminds you, tracks what you took, and shows how consistent you've been.</p>
+  </div>
+
+  <div class="auth-card">
+    <div class="tabs">
+      <button class="tab active" data-tab="login" type="button">Log in</button>
+      <button class="tab" data-tab="signup" type="button">Create account</button>
+    </div>
+
+    <form id="loginForm" class="form">
+      <h2>Welcome back</h2>
+      <label>Email<input type="email" id="lEmail" placeholder="you@example.com" required></label>
+      <label>Password<input type="password" id="lPass" placeholder="Your password" required></label>
+      <p class="err" id="lErr"></p>
+      <button class="btn block" type="submit">Log in</button>
+      <button class="btn ghost block" type="button" id="demoBtn">Try the demo account</button>
+    </form>
+
+    <form id="signupForm" class="form hidden">
+      <h2>Create your account</h2>
+      <label>Full name<input type="text" id="sName" placeholder="Your name" required></label>
+      <label>Email<input type="email" id="sEmail" placeholder="you@example.com" required></label>
+      <label>Password<input type="password" id="sPass" placeholder="At least 6 characters" minlength="6" required></label>
+      <p class="err" id="sErr"></p>
+      <button class="btn block" type="submit">Create account</button>
+    </form>
+  </div>
+</section>
+
+<!-- ============ APP ============ -->
+<div id="app" class="app hidden">
+  <aside class="side">
+    <div class="logo">💊 MediMind</div>
+    <nav>
+      <button class="nav active" data-page="dashboard"><span>🏠</span><b>Dashboard</b></button>
+      <button class="nav" data-page="meds"><span>💊</span><b>Medicines</b></button>
+      <button class="nav" data-page="history"><span>📊</span><b>History</b></button>
+      <button class="nav" data-page="settings"><span>⚙️</span><b>Settings</b></button>
+    </nav>
+    <button class="nav logout" id="logoutSide"><span>🚪</span><b>Log out</b></button>
+  </aside>
+
+  <main>
+    <header class="top">
+      <div>
+        <h2 id="greet"></h2>
+        <p class="muted" id="dateTxt"></p>
+      </div>
+      <button class="btn" id="addBtn">+ Add medicine</button>
+    </header>
+
+    <!-- Dashboard -->
+    <section class="page active" id="page-dashboard">
+      <div class="stats" id="stats"></div>
+      <div class="grid2">
+        <div class="card">
+          <h3>Today's schedule</h3>
+          <ul class="list" id="todayList"></ul>
+        </div>
+        <div class="col">
+          <div class="card ring-card">
+            <div class="ring" id="ring"><span id="ringTxt">0%</span></div>
+            <div><h3>Next dose</h3><p id="nextDose" class="muted"></p></div>
+          </div>
+          <div class="card"><h3>Health tip</h3><p id="tip" class="muted"></p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Medicines -->
+    <section class="page" id="page-meds">
+      <div class="card">
+        <h3>Your medicines</h3>
+        <ul class="list" id="medList"></ul>
+      </div>
+    </section>
+
+    <!-- History -->
+    <section class="page" id="page-history">
+      <div class="stats" id="histStats"></div>
+      <div class="card">
+        <h3>Last 7 days</h3>
+        <div class="bars" id="bars"></div>
+      </div>
+    </section>
+
+    <!-- Settings -->
+    <section class="page" id="page-settings">
+      <div class="card settings">
+        <h3>Profile</h3>
+        <label>Display name<input type="text" id="setName"></label>
+        <button class="btn" id="saveName">Save name</button>
+      </div>
+      <div class="card settings">
+        <h3>Preferences</h3>
+        <div class="row"><div><b>Browser notifications</b><p class="muted">Get a pop-up when a dose is due.</p></div><label class="switch"><input type="checkbox" id="setNotify"><i></i></label></div>
+        <div class="row"><div><b>Dark mode</b><p class="muted">Easier on the eyes at night.</p></div><label class="switch"><input type="checkbox" id="setDark"><i></i></label></div>
+      </div>
+      <div class="card settings">
+        <h3>Your data</h3>
+        <div class="actions">
+          <button class="btn ghost" id="exportBtn">Export my data</button>
+          <button class="btn danger" id="resetBtn">Delete all medicines</button>
+          <button class="btn ghost" id="logoutBtn">Log out</button>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- ============ ADD MEDICINE ============ -->
+<dialog id="modal">
+  <form id="medForm" class="form">
+    <h2>Add a medicine</h2>
+    <label>Medicine name<input type="text" id="mName" placeholder="e.g. Vitamin D" required></label>
+    <label>Dose<input type="text" id="mDose" placeholder="e.g. 1 tablet or 500 mg" required></label>
+    <label>Time to take it<input type="time" id="mTime" required></label>
+    <label>Notes (optional)<input type="text" id="mNote" placeholder="e.g. after breakfast"></label>
+    <div class="actions">
+      <button class="btn" type="submit">Save medicine</button>
+      <button class="btn ghost" type="button" id="cancelBtn">Cancel</button>
+    </div>
+  </form>
+</dialog>
+
+<div id="toast" class="toast" role="status"></div>
+<script src="script.js"></script>
+</body>
+</html>
